@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_note_application/generated/l10n.dart';
+import 'themes.dart';
 
 void main() => runApp(const Note());
 
-class Note extends StatefulWidget {
-  const Note({Key? key}) : super(key: key);
-  @override
-  State<Note> createState() => _MyAppState();
-}
-
+/*
 bool _iconBool = false;
 ThemeData _lightTheme = ThemeData(
   primarySwatch: Colors.blue,
@@ -21,61 +17,81 @@ ThemeData _darkTheme = ThemeData(
   brightness: Brightness.dark,
 );
 IconData _iconDark = Icons.nights_stay;
+*/
 
-class MyApp extends StatelessWidget {
-  const MyApp ({super.key});
+class Note extends StatelessWidget {
+  const Note({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-        localizationsDelegates: const [
-          S.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       supportedLocales: S.delegate.supportedLocales,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const HomePage()
+      home: const HomePage(),
+    );
+  }
+}
+
+class AppBarApp extends StatelessWidget {
+  const AppBarApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: HomePage(),
     );
   }
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key,});
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, 
-    children: [
-      Text(S.of(context).hello, 
-    style: const TextStyle(fontSize: 30),),
-      Text(S.of(context).goodbye, 
-    style: const TextStyle(fontSize: 30),),
-    ],
-    )));
-  }
-}
-
-class _MyAppState extends State<Note> {
-  @override 
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: _iconBool ? _darkTheme : _lightTheme,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(S.of(context).app_bar_title),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  setState(() {
-                    _iconBool = !_iconBool;
-                  });
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('AppBar Demo'),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.add_alert),
+            tooltip: 'Show Snackbar',
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('This is a snackbar')));
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.navigate_next),
+            tooltip: 'Go to the next page',
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute<void>(
+                builder: (BuildContext context) {
+                  return Scaffold(
+                    appBar: AppBar(
+                      title: const Text('Next page'),
+                    ),
+                    body: const Center(
+                      child: Text(
+                        'This is the next page',
+                        style: TextStyle(fontSize: 24),
+                      ),
+                    ),
+                  );
                 },
-                icon: Icon(_iconBool ? _iconDark : _iconLight)),
-          ],
+              ));
+            },
+          ),
+        ],
+      ),
+      body: const Center(
+        child: Text(
+          'This is the home page',
+          style: TextStyle(fontSize: 24),
         ),
       ),
     );
